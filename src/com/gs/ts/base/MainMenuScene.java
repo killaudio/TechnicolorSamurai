@@ -1,14 +1,12 @@
 package com.gs.ts.base;
 
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.util.GLState;
-import org.andengine.engine.camera.Camera;
-
+import org.andengine.util.adt.color.Color;
 import com.gs.ts.base.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener{
@@ -41,15 +39,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	private void createBackground()
 	{
-	    attachChild(new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT/2, resourcesManager.menu_background_region, vbom)
-	    {
-	        @Override
-	        protected void preDraw(GLState pGLState, Camera pCamera) 
-	        {
-	            super.preDraw(pGLState, pCamera);
-	            pGLState.enableDither();
-	        }
-	    });
+		setBackground(new Background(Color.PINK));
 	} 
 	
 	private void createMenuChildScene()

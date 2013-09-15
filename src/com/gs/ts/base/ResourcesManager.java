@@ -38,13 +38,10 @@ public class ResourcesManager
     //---------------------------------------------
     
     public ITextureRegion splash_region;
-    public ITextureRegion menu_background_region;
     public ITextureRegion play_region;
     public ITextureRegion exit_region;
-    public ITextureRegion game_background_region;
     
-    public ITextureRegion hold1_region;
-    public ITextureRegion hold2_region;
+    public ITextureRegion floor_region;
     
     public ITextureRegion player_region;
     
@@ -61,7 +58,6 @@ public class ResourcesManager
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
     	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
-    	menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "menu_background.png");
     	play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
     	exit_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "exit.png");
     	       
@@ -85,9 +81,7 @@ public class ResourcesManager
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
     	gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
-    	game_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "game_background.png");
-    	hold1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "hold1.png");
-    	hold2_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "hold2.png");
+    	floor_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "floor.png");
     	player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 3, 1);
     	
     	try 

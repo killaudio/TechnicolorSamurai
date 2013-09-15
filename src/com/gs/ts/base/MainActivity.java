@@ -19,8 +19,8 @@ import android.view.KeyEvent;
 
 public class MainActivity extends BaseGameActivity {
 
-	private static final int CAMERA_WIDTH = 960;
-    private static final int CAMERA_HEIGHT = 540;
+	private static final int CAMERA_WIDTH = 1920;
+    private static final int CAMERA_HEIGHT = 1080;
     private BoundCamera camera;
     private ResourcesManager resourcesManager;
         

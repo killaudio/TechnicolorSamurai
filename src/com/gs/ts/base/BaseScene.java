@@ -22,8 +22,8 @@ public abstract class BaseScene extends Scene
     protected VertexBufferObjectManager vbom;
     protected BoundCamera camera;
     
-	protected static final int CAMERA_WIDTH = 960;
-    protected static final int CAMERA_HEIGHT = 540;
+	protected static final int CAMERA_WIDTH = 1920;
+    protected static final int CAMERA_HEIGHT = 1080;
     
     //---------------------------------------------
     // CONSTRUCTOR

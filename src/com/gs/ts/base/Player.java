@@ -19,7 +19,9 @@ public abstract class Player  extends AnimatedSprite{
 	// ---------------------------------------------
 	    
 	private Body body;
-	private boolean canRun = false;
+	private boolean runRight = false;
+	private boolean runLeft = false;
+	private boolean stop = false;
 	private int footContacts = 0;
 	
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
@@ -42,23 +44,48 @@ public abstract class Player  extends AnimatedSprite{
 	                onDie();
 	            }
 	            
-	            if (canRun)
+	            if (runRight)
 	            {    
 	                body.setLinearVelocity(new Vector2(5, body.getLinearVelocity().y)); 
+	            }
+	            if (runLeft)
+	            {    
+	                body.setLinearVelocity(new Vector2(-5, body.getLinearVelocity().y)); 
+	            }
+	            if (stop)
+	            {
+	            	body.setLinearVelocity(0, 0);
 	            }
 	        }
 	    });
 	}
 	
-	public void setRunning()
+	public void setRunningRight()
 	{
-	    canRun = true;
-	        
-	    final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };
-	        
+		stop = false;
+		runLeft = false;
+		runRight = true;
+		
+	    final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };    
 	    animate(PLAYER_ANIMATE, 0, 2, true);
 	}
 
+	public void setRunningLeft()
+	{
+		stop = false;
+		runRight = false;
+		runLeft = true;
+		
+		final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };
+	    animate(PLAYER_ANIMATE, 0, 2, true);
+	}
+	
+	public void setRunningFalse() {
+		runLeft = false;
+		runRight = false;
+		stop = true;
+	}
+	
 	public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld) {
 		super(pX, pY, (ITiledTextureRegion) ResourcesManager.getInstance().player_region, vbo);
 		createPhysics(camera, physicsWorld);
