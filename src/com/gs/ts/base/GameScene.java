@@ -83,6 +83,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
     private void loadLevel(int levelID)
     {
+    	//TODO fix camera/scene/screen size, add switch color bar, introduce objects.
+    	
         final SimpleLevelLoader levelLoader = new SimpleLevelLoader(vbom);
         
         final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
