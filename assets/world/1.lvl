@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<level width="1000" height="780">
+<level width="100000" height="7800">
 	<entity x="100" y="240" type="player"/>    
     <entity x="0" y="0" type="floor"/>
-    <entity x="1000" y="0" type="floor"/>
-    <entity x="2000" y="0" type="floor"/>
+    <entity x="1100" y="0" type="floor"/>
+    <entity x="2250" y="0" type="floor"/>
 </level>

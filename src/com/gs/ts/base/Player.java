@@ -46,15 +46,15 @@ public abstract class Player  extends AnimatedSprite{
 	            
 	            if (runRight)
 	            {    
-	                body.setLinearVelocity(new Vector2(5, body.getLinearVelocity().y)); 
+	                body.setLinearVelocity(new Vector2(7, body.getLinearVelocity().y)); 
 	            }
 	            if (runLeft)
 	            {    
-	                body.setLinearVelocity(new Vector2(-5, body.getLinearVelocity().y)); 
+	                body.setLinearVelocity(new Vector2(-7, body.getLinearVelocity().y)); 
 	            }
 	            if (stop)
 	            {
-	            	body.setLinearVelocity(0, 0);
+	            	body.setLinearVelocity(0, body.getLinearVelocity().y);
 	            }
 	        }
 	    });
@@ -65,7 +65,7 @@ public abstract class Player  extends AnimatedSprite{
 		stop = false;
 		runLeft = false;
 		runRight = true;
-		
+		this.setFlippedHorizontal(false);
 	    final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };    
 	    animate(PLAYER_ANIMATE, 0, 2, true);
 	}
@@ -75,15 +75,16 @@ public abstract class Player  extends AnimatedSprite{
 		stop = false;
 		runRight = false;
 		runLeft = true;
-		
+		this.setFlippedHorizontal(true);
 		final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100 };
-	    animate(PLAYER_ANIMATE, 0, 2, true);
+		animate(PLAYER_ANIMATE, 0, 2, true);
 	}
 	
 	public void setRunningFalse() {
 		runLeft = false;
 		runRight = false;
 		stop = true;
+		stopAnimation(1);
 	}
 	
 	public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld) {
@@ -100,7 +101,7 @@ public abstract class Player  extends AnimatedSprite{
 	    {
 	        return; 
 	    }
-	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 12)); 
+	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 17)); 
 	}
 	
 	public void increaseFootContacts()

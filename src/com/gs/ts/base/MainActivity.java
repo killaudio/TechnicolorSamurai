@@ -12,9 +12,11 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 
 public class MainActivity extends BaseGameActivity {
@@ -31,6 +33,11 @@ public class MainActivity extends BaseGameActivity {
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.camera);
 		//engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
+		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
+		if(!MultiTouch.isSupported(this)) {
+			Toast.makeText(this, "Multitouch not supported. Quiting", Toast.LENGTH_LONG).show();
+			System.exit(0);
+		}
 		return engineOptions;
 	}
 

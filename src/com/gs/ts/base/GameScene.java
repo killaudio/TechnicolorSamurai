@@ -46,7 +46,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		
 	private Text gameOverText;
 	private boolean gameOverDisplayed = false;
-	
+	private int touchNumber = 0;
     
     //---------------------------------------------
     // Level loader stuff
@@ -254,14 +254,31 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+			
 		if(pSceneTouchEvent.isActionDown())
 		{
-			player.setRunningRight();
-		}
+			touchNumber++;
+			if (touchNumber==1){
+				if (pSceneTouchEvent.getMotionEvent().getX() > CAMERA_WIDTH/2)
+				{
+					player.setRunningRight();
+				}
+				if (pSceneTouchEvent.getMotionEvent().getX() < CAMERA_WIDTH/2)
+				{
+					player.setRunningLeft();
+				}
+			} else {
+				player.jump();
+			}
+		}			
+		
 		if(pSceneTouchEvent.isActionUp())
 		{
-			player.setRunningFalse(); //TODO start here, implement controls
+			touchNumber--;
+			if (touchNumber==0)
+			player.setRunningFalse();
 		}
+		
 		return false;
 	}
 	
