@@ -101,7 +101,7 @@ public abstract class Player  extends AnimatedSprite{
 	    {
 	        return; 
 	    }
-	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 17)); 
+	    body.setLinearVelocity(new Vector2(body.getLinearVelocity().x, 37)); 
 	}
 	
 	public void increaseFootContacts()

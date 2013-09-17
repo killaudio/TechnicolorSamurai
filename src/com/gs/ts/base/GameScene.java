@@ -76,7 +76,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	private void createPhysics()
 	{
 		//mod gravity vector accordingly to affect gravity(new Vector2(0, -17))
-	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -17), false);
+	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -90), false);
 	    physicsWorld.setContactListener(contactListener());
 	    registerUpdateHandler(physicsWorld);
 	}
@@ -96,8 +96,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
                 final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
                 
-                camera.setBounds(0, 0, width, height); // here we set camera bounds
-                camera.setBoundsEnabled(true);
+                //camera.setBounds(0, 0, width, height); // here we set camera bounds
+                //camera.setBoundsEnabled(true);
 
                 return GameScene.this;
             }
