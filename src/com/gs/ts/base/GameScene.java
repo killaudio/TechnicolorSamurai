@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
@@ -279,6 +280,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 			touchNumber--;
 			if (touchNumber==0)
 			player.setRunningFalse();
+			else if (touchNumber==1)
+			{
+				//TODO fix running here
+			}
 		}
 		
 		return false;

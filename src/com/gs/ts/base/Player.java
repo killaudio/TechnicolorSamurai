@@ -46,11 +46,11 @@ public abstract class Player  extends AnimatedSprite{
 	            
 	            if (runRight)
 	            {    
-	                body.setLinearVelocity(new Vector2(7, body.getLinearVelocity().y)); 
+	                body.setLinearVelocity(new Vector2(12, body.getLinearVelocity().y)); 
 	            }
 	            if (runLeft)
 	            {    
-	                body.setLinearVelocity(new Vector2(-7, body.getLinearVelocity().y)); 
+	                body.setLinearVelocity(new Vector2(-12, body.getLinearVelocity().y)); 
 	            }
 	            if (stop)
 	            {
@@ -80,11 +80,20 @@ public abstract class Player  extends AnimatedSprite{
 		animate(PLAYER_ANIMATE, 0, 2, true);
 	}
 	
-	public void setRunningFalse() {
+	public void setRunningFalse() 
+	{
 		runLeft = false;
 		runRight = false;
 		stop = true;
 		stopAnimation(1);
+	}
+	
+	public boolean isRunningRight(){
+		return this.runRight;
+	}
+	
+	public boolean isRunningLeft(){
+		return this.runLeft;
 	}
 	
 	public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld) {
