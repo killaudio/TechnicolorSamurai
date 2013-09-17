@@ -22,8 +22,8 @@ public abstract class BaseScene extends Scene
     protected VertexBufferObjectManager vbom;
     protected BoundCamera camera;
     
-	protected static final int CAMERA_WIDTH = 1920;
-    protected static final int CAMERA_HEIGHT = 1080;
+	protected static float CAMERA_WIDTH;
+    protected static float CAMERA_HEIGHT;
     
     //---------------------------------------------
     // CONSTRUCTOR
@@ -31,11 +31,13 @@ public abstract class BaseScene extends Scene
     
     public BaseScene()
     {
-        this.resourcesManager = ResourcesManager.getInstance();
+    	this.resourcesManager = ResourcesManager.getInstance();
         this.engine = resourcesManager.engine;
         this.activity = resourcesManager.activity;
         this.vbom = resourcesManager.vbom;
         this.camera = resourcesManager.camera;
+        CAMERA_WIDTH = camera.getXMax();
+    	CAMERA_HEIGHT = camera.getYMax();
         createScene();
     }
     

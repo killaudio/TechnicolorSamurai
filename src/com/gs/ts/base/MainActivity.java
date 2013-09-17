@@ -22,22 +22,20 @@ import android.widget.Toast;
 
 public class MainActivity extends BaseGameActivity {
 
-	private static int CAMERA_WIDTH = 1920;
-    private static int CAMERA_HEIGHT = 1080;
     private BoundCamera camera;
     private ResourcesManager resourcesManager;
         
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		
+		int x,y;
 		DisplayMetrics metrics = new DisplayMetrics();
 	    getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	    CAMERA_WIDTH = metrics.widthPixels;
-	    CAMERA_HEIGHT = metrics.heightPixels;
+	    x = metrics.widthPixels;
+	    y = metrics.heightPixels;
 		
-		camera = new BoundCamera (0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+		camera = new BoundCamera (0, 0, x, y);
 		EngineOptions engineOptions = new EngineOptions(true,ScreenOrientation.LANDSCAPE_FIXED, 
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.camera);
+				new RatioResolutionPolicy(x, y), this.camera);
 		//engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
