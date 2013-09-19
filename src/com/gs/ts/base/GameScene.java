@@ -48,8 +48,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		
 	private Text gameOverText;
 	private boolean gameOverDisplayed = false;
+<<<<<<< HEAD
 	private int touchNumberLeft = 0;
 	private int touchNumberRight = 0;
+=======
+	private int touchNumber = 0;
+	private float lastJump = -1 ;
+>>>>>>> 2709f9cc616c64f432001359cfa726bcf87cf0c8
     
     //---------------------------------------------
     // Level loader stuff
@@ -333,7 +338,40 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+<<<<<<< HEAD
 
+=======
+		if(pSceneTouchEvent.isActionDown())
+		{
+			float eventX = pSceneTouchEvent.getMotionEvent().getX();
+			touchNumber++;
+			if (touchNumber==1){
+				if (eventX > CAMERA_WIDTH/2)
+				{
+					player.setRunningRight();
+				}
+				if (eventX < CAMERA_WIDTH/2)
+				{
+					player.setRunningLeft();
+				}
+			} else {
+				player.jump();
+			}
+		}			
+		
+		if(pSceneTouchEvent.isActionUp())
+		{
+			float eventX = pSceneTouchEvent.getMotionEvent().getX();
+			touchNumber--;
+			if (touchNumber==0)
+			player.setRunningFalse();
+			else if (touchNumber==1)
+			{
+				//TODO fix jump
+			}
+		}
+		
+>>>>>>> 2709f9cc616c64f432001359cfa726bcf87cf0c8
 		return false;
 	}
 	
