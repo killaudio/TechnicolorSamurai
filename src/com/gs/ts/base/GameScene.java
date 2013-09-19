@@ -72,8 +72,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
 		scoreText.setAnchorCenter(0, 0);    
 		scoreText.setText("Score: 0");
-		
-		final Rectangle left = new Rectangle(CAMERA_WIDTH/4, CAMERA_HEIGHT/2, CAMERA_WIDTH/2, CAMERA_HEIGHT, vbom)
+		//Controls
+		final Rectangle left = new Rectangle(CAMERA_WIDTH/4, 2*CAMERA_HEIGHT/3, CAMERA_WIDTH/2, 2*CAMERA_HEIGHT/3, vbom)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -98,7 +98,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		    };
 		};
 		    
-		final Rectangle right = new Rectangle(CAMERA_WIDTH - CAMERA_WIDTH/4, CAMERA_HEIGHT/2, CAMERA_WIDTH/2, CAMERA_HEIGHT, vbom)
+		final Rectangle right = new Rectangle(CAMERA_WIDTH - CAMERA_WIDTH/4, 2*CAMERA_HEIGHT/3, CAMERA_WIDTH/2, 2*CAMERA_HEIGHT/3, vbom)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -123,14 +123,29 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		    };
 		};
 		
-		left.setColor(Color.BLUE);
+		final Rectangle changeColor = new Rectangle(CAMERA_WIDTH/2, CAMERA_HEIGHT/6, CAMERA_WIDTH/4, CAMERA_HEIGHT/3, vbom)
+		{
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
+		    {
+				if (touchEvent.isActionDown()){
+					player.cycleColor();
+				}
+				return true;
+		    };
+		};
+		
+		left.setColor(Color.RED);
 		right.setColor(Color.CYAN);
-		left.setAlpha(0.3f);
-		right.setAlpha(0.3f);
+		changeColor.setColor(Color.PINK);
+		left.setAlpha(0.0f);
+		right.setAlpha(0.0f);
+		changeColor.setAlpha(0.0f);
 		gameHUD.registerTouchArea(left);
 		gameHUD.registerTouchArea(right);
+		gameHUD.registerTouchArea(changeColor);
 		gameHUD.attachChild(left);
 		gameHUD.attachChild(right);
+		gameHUD.attachChild(changeColor);
 		gameHUD.attachChild(scoreText);
 		camera.setHUD(gameHUD);
 	}
@@ -145,7 +160,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
     private void loadLevel(int levelID)
     {
-    	//TODO fix camera/scene/screen size, add switch color bar, introduce objects.
+    	//TODO introduce objects.
     	
         final SimpleLevelLoader levelLoader = new SimpleLevelLoader(vbom);
         

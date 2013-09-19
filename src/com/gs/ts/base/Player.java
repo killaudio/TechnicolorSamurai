@@ -7,6 +7,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,7 +24,7 @@ public abstract class Player  extends AnimatedSprite{
 	private boolean runLeft = false;
 	private boolean stop = false;
 	private int footContacts = 0;
-	
+	private boolean toggle = false;
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{        
 	    body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
@@ -121,5 +122,15 @@ public abstract class Player  extends AnimatedSprite{
 	public void decreaseFootContacts()
 	{
 	    footContacts--;
+	}
+
+	public void cycleColor() {
+		if (toggle == false){
+			this.setColor(Color.BLACK);
+			toggle = !toggle;
+		} else {
+			this.setColor(Color.WHITE);
+			toggle = !toggle;
+		}
 	}
 }

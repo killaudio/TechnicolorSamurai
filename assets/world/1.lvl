@@ -2,7 +2,4 @@
 <level width="100000" height="7800">
 	<entity x="100" y="240" type="player"/>    
     <entity x="0" y="0" type="floor"/>
-    <entity x="960" y="0" type="floor"/>
-    <entity x="1920" y="0" type="floor"/>
-    <entity x="2800" y="0" type="floor"/>
 </level>
