@@ -278,12 +278,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     	{
                     		player.decreaseFootContacts();
                     	}
+                  
+                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
+                    	if (x1.getBody().getUserData().equals("obs1") || x2.getBody().getUserData().equals("obs1"))
+                    	{
+		                    if (isSensor){
+		                		bodySensor.getFixtureList().get(0).setSensor(false);
+		                		isSensor = false;
+		                    }
+                    	}
                 }
-                
-            	if (isSensor){
-            		bodySensor.getFixtureList().get(0).setSensor(false);
-            		isSensor = false;
-            	}
             }
 
             public void preSolve(Contact contact, Manifold oldManifold)
