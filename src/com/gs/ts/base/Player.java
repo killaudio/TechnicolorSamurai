@@ -25,6 +25,8 @@ public abstract class Player  extends AnimatedSprite{
 	private boolean stop = false;
 	private int footContacts = 0;
 	private boolean toggle = false;
+	public enum colorsEnum {BLACK, WHITE};
+	private colorsEnum myColor;
 	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{        
 	    body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
@@ -127,10 +129,19 @@ public abstract class Player  extends AnimatedSprite{
 	public void cycleColor() {
 		if (toggle == false){
 			this.setColor(Color.BLACK);
+			myColor = colorsEnum.BLACK;
 			toggle = !toggle;
 		} else {
 			this.setColor(Color.WHITE);
+			myColor = colorsEnum.WHITE;
 			toggle = !toggle;
 		}
+	}
+
+	public boolean isColor(colorsEnum color) {
+		if(myColor == color)
+			return true;
+		return false;
+		
 	}
 }

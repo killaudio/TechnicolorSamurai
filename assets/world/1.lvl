@@ -2,4 +2,5 @@
 <level width="100000" height="7800">
 	<entity x="100" y="240" type="player"/>    
     <entity x="0" y="0" type="floor"/>
+    <entity x="300" y="225" type="obs1"/>
 </level>

@@ -42,13 +42,15 @@ public class ResourcesManager
     public ITextureRegion exit_region;
     
     public ITextureRegion floor_region;
-    
+    public ITextureRegion obs1_region;
     public ITextureRegion player_region;
     
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     
     private BitmapTextureAtlas splashTextureAtlas;
     private BuildableBitmapTextureAtlas menuTextureAtlas;
+
+	 
     
     //---------------------------------------------
     // CLASS LOGIC
@@ -82,6 +84,7 @@ public class ResourcesManager
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
     	gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
     	floor_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "floor.png");
+    	obs1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "obstacle1.png");
     	player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 3, 1);
     	
     	try 

@@ -6,13 +6,13 @@ import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnectorManager;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
@@ -26,8 +26,10 @@ import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactFilter;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -45,7 +47,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
     
 	private Player player;
-		
 	private Text gameOverText;
 	private boolean gameOverDisplayed = false;
 
@@ -62,6 +63,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
         
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR = "floor";
+    private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1 = "obs1";
 	
 	private void createBackground(){
 		setBackground(new Background(Color.BLUE));
@@ -196,25 +198,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     levelObject = new Sprite(x, y, resourcesManager.floor_region, vbom);
                     PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("floor");
                 } 
-//                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_COIN))
-//                {
-//                    levelObject = new Sprite(x, y, resourcesManager.coin_region, vbom)
-//                    {
-//                        @Override
-//                        protected void onManagedUpdate(float pSecondsElapsed) 
-//                        {
-//                            super.onManagedUpdate(pSecondsElapsed);
-//                            
-//					                if (player.collidesWith(this))
-//					                {
-//					                    addToScore(10);
-//					                    this.setVisible(false);
-//					                    this.setIgnoreUpdate(true);
-//					                }
-//                        }
-//                    };
-//                    levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1.3f)));
-//                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1))
+                {
+                    levelObject = new Sprite(x, y, resourcesManager.obs1_region, vbom);
+                    PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("obs1");
+                }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
                 {
                     player = new Player(x, y, vbom, camera, physicsWorld)
@@ -256,12 +244,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
         attachChild(gameOverText);
         gameOverDisplayed = true;
     }
-    
+//TODO MOVE to its own class. FIX endcontant sensor
     private ContactListener contactListener()
     {
         ContactListener contactListener = new ContactListener()
         {
-        	//TODO Validate that fixtures equals to whatever we want to interact with
+        	boolean isSensor = false;
+        	Body bodySensor;
             public void beginContact(Contact contact)
             {
                 final Fixture x1 = contact.getFixtureA();
@@ -269,10 +258,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 
                 if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
                 {
-                    if (x1.getBody().getUserData().equals("player"))
-                    {
-                        player.increaseFootContacts();
-                    }
+                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
+                    	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor"))
+                    	{
+                    		player.increaseFootContacts();
+                    	}
                 }
             }
 
@@ -283,26 +273,53 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 
                 if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
                 {
-                    if (x1.getBody().getUserData().equals("player"))
-                    {
-                        player.decreaseFootContacts();
-                    }
+                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
+                    	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor"))
+                    	{
+                    		player.decreaseFootContacts();
+                    	}
                 }
+                
+            	if (isSensor){
+            		bodySensor.getFixtureList().get(0).setSensor(false);
+            		isSensor = false;
+            	}
             }
 
             public void preSolve(Contact contact, Manifold oldManifold)
             {
+            	final Fixture x1 = contact.getFixtureA();
+                final Fixture x2 = contact.getFixtureB();
 
+                if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
+                {
+                	if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
+                    	if (x1.getBody().getUserData().equals("obs1") || x2.getBody().getUserData().equals("obs1"))
+                    	{
+                    		if (player.isColor(Player.colorsEnum.BLACK))
+                    		{
+                    			if (x1.getBody().getUserData().equals("obs1"))
+                    			{
+                    				x1.getBody().getFixtureList().get(0).setSensor(true);
+                    				bodySensor = x1.getBody(); 
+                    			} else {
+                    				x2.getBody().getFixtureList().get(0).setSensor(true);
+                    				bodySensor = x2.getBody();
+                    			}
+                    			isSensor = true;
+                    		}
+                    	}
+                }
             }
 
             public void postSolve(Contact contact, ContactImpulse impulse)
             {
-
+         		
             }
         };
         return contactListener;
     }
-    
+//move to its own class (contactlistener)
 	@Override
 	public void createScene() {
 	    createBackground();
