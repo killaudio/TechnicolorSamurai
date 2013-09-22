@@ -195,6 +195,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 {
                     levelObject = new Sprite(x, y, resourcesManager.floor_region, vbom);
                     PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("floor");
+                    levelObject.setShaderProgram(PositionColorTextureCoordinatesParabolaShaderProgram.getInstance());
                 } 
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1))
                 {

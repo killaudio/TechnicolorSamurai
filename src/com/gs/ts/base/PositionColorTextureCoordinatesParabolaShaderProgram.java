@@ -40,7 +40,9 @@ public class PositionColorTextureCoordinatesParabolaShaderProgram extends Shader
 			"varying lowp vec4 " + ShaderProgramConstants.VARYING_COLOR + ";\n" +
 			"varying mediump vec2 " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ";\n" +
 			"void main() {\n" +
+			" if (gl_FragCoord.x < 1000.0);\n" +
 			"	gl_FragColor = " + ShaderProgramConstants.VARYING_COLOR + " * texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ");\n" +
+			" else gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);\n" +
 			"}";
 
 	// ===========================================================
