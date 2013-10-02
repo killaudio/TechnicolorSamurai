@@ -30,8 +30,8 @@ public class MainActivity extends BaseGameActivity {
 		int x,y;
 		DisplayMetrics metrics = new DisplayMetrics();
 	    getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	    x = metrics.widthPixels;
-	    y = metrics.heightPixels;
+	    x = metrics.widthPixels/2;
+	    y = metrics.heightPixels/2;
 		
 		camera = new BoundCamera (0, 0, x, y);
 		EngineOptions engineOptions = new EngineOptions(true,ScreenOrientation.LANDSCAPE_FIXED, 
