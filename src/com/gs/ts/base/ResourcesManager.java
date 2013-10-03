@@ -50,6 +50,8 @@ public class ResourcesManager
     private BitmapTextureAtlas splashTextureAtlas;
     private BuildableBitmapTextureAtlas menuTextureAtlas;
 
+
+
 	 
     
     //---------------------------------------------

@@ -62,6 +62,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
         
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR = "floor";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1 = "obs1";
+    private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2 = "obs2";
 	
 	private void createBackground(){
 		setBackground(new Background(Color.BLUE));
@@ -201,6 +202,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 {
                     levelObject = new Sprite(x, y, resourcesManager.obs1_region, vbom);
                     PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("obs1");
+                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2))
+                {
+                    Rectangle myObs2 = new Rectangle(x,y,100,20,vbom);
+                    myObs2.setColor(Color.CYAN);
+                    PhysicsFactory.createBoxBody(physicsWorld, myObs2, BodyType.StaticBody, FIXTURE_DEF).setUserData("obs1");
+                    return myObs2;
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
                 {
