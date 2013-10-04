@@ -3,5 +3,5 @@
 	<entity x="100" y="240" type="player"/>    
     <entity x="0" y="0" type="floor"/>
     <entity x="300" y="225" type="obs1"/>
-    <entity x="650" y="-70" type="obs2"/>
+    <entity x="650" y="70" type="obs2"/>
 </level>

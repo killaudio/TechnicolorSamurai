@@ -190,7 +190,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 final int y = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_Y);
                 final String type = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_TYPE);
                 
-                final Sprite levelObject;
+                final IEntity levelObject;
                 
                 if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR))
                 {
@@ -205,10 +205,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2))
                 {
-                    Rectangle myObs2 = new Rectangle(x,y,100,20,vbom);
-                    myObs2.setColor(Color.CYAN);
-                    PhysicsFactory.createBoxBody(physicsWorld, myObs2, BodyType.StaticBody, FIXTURE_DEF).setUserData("obs1");
-                    return myObs2;
+                    levelObject = new Rectangle(x,y,100,20,vbom);
+                    levelObject.setColor(Color.CYAN);
+                    PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("floor");
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
                 {
@@ -339,6 +338,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	    loadLevel(1);
 	    createGameOverText();
 	    setOnSceneTouchListener(this);
+	    this.setWidth(600);
+	    this.setHeight(400);
 	}
 
 	@Override
