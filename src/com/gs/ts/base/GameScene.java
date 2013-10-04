@@ -58,12 +58,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     private static final String TAG_ENTITY = "entity";
     private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
     private static final String TAG_ENTITY_ATTRIBUTE_Y = "y";
+    private static final String TAG_ENTITY_ATTRIBUTE_W = "w";
+    private static final String TAG_ENTITY_ATTRIBUTE_H = "h";
     private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
         
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR = "floor";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1 = "obs1";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2 = "obs2";
+    private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ZONE = "zone";
 	
+    private int edgeL=0;
+    private int edgeR=(int) (2080 - CAMERA_WIDTH);
+    
 	private void createBackground(){
 		setBackground(new Background(Color.BLUE));
 	}
@@ -201,13 +207,24 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1))
                 {
                     levelObject = new Sprite(x, y, resourcesManager.obs1_region, vbom);
-                    PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("obs1");
+                    PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("obstacle");
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2))
                 {
-                    levelObject = new Rectangle(x,y,100,20,vbom);
+                	final int w = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_W);
+                    final int h = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_H);
+                	levelObject = new Rectangle(x,y,w,h,vbom);
                     levelObject.setColor(Color.CYAN);
                     PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("floor");
+                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ZONE))
+                {
+                    FixtureDef sensorDef = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+                    sensorDef.isSensor = true;
+                	levelObject = new Rectangle(x,y,CAMERA_WIDTH,CAMERA_HEIGHT,vbom);
+                    levelObject.setColor(Color.BLACK);
+                    levelObject.setAlpha(0.3f);
+                    PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, sensorDef).setUserData("zone");
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
                 {
@@ -261,14 +278,22 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
             {
                 final Fixture x1 = contact.getFixtureA();
                 final Fixture x2 = contact.getFixtureB();
-
+                
                 if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
                 {
-                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
-                    	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor"))
-                    	{
+                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player")){
+                    	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor")){
                     		player.increaseFootContacts();
                     	}
+                    	if(x1.getBody().getUserData().equals("zone") || x2.getBody().getUserData().equals("zone")){
+                    		for (int counter = 1; counter<mChildren.size(); counter++){
+                    			if (mChildren.get(counter).getX() + mChildren.get(counter).getWidth()/2 < edgeR){
+                    				mChildren.get(counter).setX(mChildren.get(counter).getX() + edgeR + CAMERA_WIDTH + mChildren.get(counter).getWidth()/2);
+                    				//TODO move bodies around instead of sprites, refine zone exit right or exit left
+                    			}
+                    		}
+                    	}
+                    }
                 }
             }
 
@@ -286,7 +311,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     	}
                   
                     if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
-                    	if (x1.getBody().getUserData().equals("obs1") || x2.getBody().getUserData().equals("obs1"))
+                    	if (x1.getBody().getUserData().equals("obstacle") || x2.getBody().getUserData().equals("obstacle"))
                     	{
 		                    if (isSensor){
 		                		bodySensor.getFixtureList().get(0).setSensor(false);
@@ -304,11 +329,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                 if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
                 {
                 	if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
-                    	if (x1.getBody().getUserData().equals("obs1") || x2.getBody().getUserData().equals("obs1"))
+                    	if (x1.getBody().getUserData().equals("obstacle") || x2.getBody().getUserData().equals("obstacle"))
                     	{
                     		if (player.isColor(Player.colorsEnum.BLACK))
                     		{
-                    			if (x1.getBody().getUserData().equals("obs1"))
+                    			if (x1.getBody().getUserData().equals("obstacle"))
                     			{
                     				x1.getBody().getFixtureList().get(0).setSensor(true);
                     				bodySensor = x1.getBody(); 
@@ -338,8 +363,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	    loadLevel(1);
 	    createGameOverText();
 	    setOnSceneTouchListener(this);
-	    this.setWidth(600);
-	    this.setHeight(400);
 	}
 
 	@Override

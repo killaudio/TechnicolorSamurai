@@ -3,5 +3,9 @@
 	<entity x="100" y="240" type="player"/>    
     <entity x="0" y="0" type="floor"/>
     <entity x="300" y="225" type="obs1"/>
-    <entity x="650" y="70" type="obs2"/>
+    <entity x="650" y="70" w="100" h="20" type="obs2"/>
+    <entity x="900" y="70" w="200" h="10" type="obs2"/>
+    <entity x="1200" y="160" w="400" h="5" type="obs2"/>
+    <entity x="1600" y="0" w="400" h="10" type="obs2"/>
+    <entity x="1600" y="21" type="zone"/>
 </level>
