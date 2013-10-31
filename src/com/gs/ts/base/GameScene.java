@@ -1,6 +1,7 @@
 package com.gs.ts.base;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
@@ -67,9 +68,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2 = "obs2";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ZONE = "zone";
 	
-    private int edgeL=0;
-    private int edgeR=(int) (2080 - CAMERA_WIDTH);
-    
 	private void createBackground(){
 		setBackground(new Background(Color.BLUE));
 	}
@@ -81,7 +79,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		scoreText.setAnchorCenter(0, 0);    
 		scoreText.setText("Score: 0");
 		//Controls
-		final Rectangle left = new Rectangle(CAMERA_WIDTH/4, 2*CAMERA_HEIGHT/3, CAMERA_WIDTH/2, 2*CAMERA_HEIGHT/3, vbom)
+		final Rectangle left = new Rectangle(CAMERA_WIDTH/4, CAMERA_HEIGHT/2, CAMERA_WIDTH/2, CAMERA_HEIGHT, vbom)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -106,7 +104,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		    };
 		};
 		    
-		final Rectangle right = new Rectangle(CAMERA_WIDTH - CAMERA_WIDTH/4, 2*CAMERA_HEIGHT/3, CAMERA_WIDTH/2, 2*CAMERA_HEIGHT/3, vbom)
+		final Rectangle right = new Rectangle(CAMERA_WIDTH - CAMERA_WIDTH/4, CAMERA_HEIGHT/2, CAMERA_WIDTH/2, CAMERA_HEIGHT, vbom)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -148,12 +146,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		left.setAlpha(0.0f);
 		right.setAlpha(0.0f);
 		changeColor.setAlpha(0.0f);
+		gameHUD.registerTouchArea(changeColor);
 		gameHUD.registerTouchArea(left);
 		gameHUD.registerTouchArea(right);
-		gameHUD.registerTouchArea(changeColor);
+		gameHUD.attachChild(changeColor);
 		gameHUD.attachChild(left);
 		gameHUD.attachChild(right);
-		gameHUD.attachChild(changeColor);
 		gameHUD.attachChild(scoreText);
 		camera.setHUD(gameHUD);
 	}
@@ -168,7 +166,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
     private void loadLevel(int levelID)
     {
-    	//TODO introduce objects.
     	
         final SimpleLevelLoader levelLoader = new SimpleLevelLoader(vbom);
         
@@ -178,12 +175,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
         {
             public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException 
             {
-                //final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
-                //final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
-                
-                //camera.setBounds(0, 0, width, height); // here we set camera bounds
-                //camera.setBoundsEnabled(true);
-
                 return GameScene.this;
             }
         });
@@ -267,7 +258,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
         attachChild(gameOverText);
         gameOverDisplayed = true;
     }
-//TODO MOVE to its own class.
+
     private ContactListener contactListener()
     {
         ContactListener contactListener = new ContactListener()
@@ -286,12 +277,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     		player.increaseFootContacts();
                     	}
                     	if(x1.getBody().getUserData().equals("zone") || x2.getBody().getUserData().equals("zone")){
-                    		for (int counter = 1; counter<mChildren.size(); counter++){
-                    			if (mChildren.get(counter).getX() + mChildren.get(counter).getWidth()/2 < edgeR){
-                    				mChildren.get(counter).setX(mChildren.get(counter).getX() + edgeR + CAMERA_WIDTH + mChildren.get(counter).getWidth()/2);
-                    				//TODO move bodies around instead of sprites, refine zone exit right or exit left
-                    			}
-                    		}
+                    				Iterator<Body> bodies = physicsWorld.getBodies();
+//                    				bodies.next();
+//                    				bodies.next().setTransform(mChildren.get(counter).getX() + edgeR + CAMERA_WIDTH + mChildren.get(counter).getWidth()/2,
+//                    						mChildren.get(counter).getY(), 0);
                     	}
                     }
                 }
@@ -354,8 +343,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
         };
         return contactListener;
     }
-//move to its own class (contactlistener)
-	@Override
+
+    @Override
 	public void createScene() {
 	    createBackground();
 	    createHUD();
