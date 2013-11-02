@@ -63,6 +63,10 @@ public abstract class Player  extends AnimatedSprite{
 	    });
 	}
 	
+	public Body getBody()
+	{
+		return this.body;
+	}
 	public void setRunningRight()
 	{
 		stop = false;

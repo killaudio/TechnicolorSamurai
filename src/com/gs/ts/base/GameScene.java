@@ -1,9 +1,9 @@
 package com.gs.ts.base;
 
 import java.io.IOException;
-import java.util.Iterator;
-
+import java.util.ArrayList;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -15,6 +15,7 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -51,6 +52,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 
 	private int touchNumberLeft = 0;
 	private int touchNumberRight = 0;
+	
+	private ArrayList<MoveBodyTask> taskList;
     
     //---------------------------------------------
     // Level loader stuff
@@ -66,7 +69,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR = "floor";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1 = "obs1";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2 = "obs2";
-    private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ZONE = "zone";
 	
 	private void createBackground(){
 		setBackground(new Background(Color.BLUE));
@@ -208,15 +210,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     levelObject.setColor(Color.CYAN);
                     PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("floor");
                 }
-                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ZONE))
-                {
-                    FixtureDef sensorDef = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-                    sensorDef.isSensor = true;
-                	levelObject = new Rectangle(x,y,CAMERA_WIDTH,CAMERA_HEIGHT,vbom);
-                    levelObject.setColor(Color.BLACK);
-                    levelObject.setAlpha(0.3f);
-                    PhysicsFactory.createBoxBody(physicsWorld, levelObject, BodyType.StaticBody, sensorDef).setUserData("zone");
-                }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
                 {
                     player = new Player(x, y, vbom, camera, physicsWorld)
@@ -275,12 +268,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player")){
                     	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor")){
                     		player.increaseFootContacts();
-                    	}
-                    	if(x1.getBody().getUserData().equals("zone") || x2.getBody().getUserData().equals("zone")){
-                    				Iterator<Body> bodies = physicsWorld.getBodies();
-//                    				bodies.next();
-//                    				bodies.next().setTransform(mChildren.get(counter).getX() + edgeR + CAMERA_WIDTH + mChildren.get(counter).getWidth()/2,
-//                    						mChildren.get(counter).getY(), 0);
+                    		if (player.getBody().getPosition().x >= 2101 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT)
+                    			taskList.add(new MoveBodyTask(player, 1 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT , 
+                    					player.getBody().getPosition().y, 0));
                     	}
                     }
                 }
@@ -352,6 +342,28 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	    loadLevel(1);
 	    createGameOverText();
 	    setOnSceneTouchListener(this);
+	    taskList = new ArrayList<MoveBodyTask>();
+	    registerUpdateHandler(new IUpdateHandler()
+	    {
+
+	        @Override
+	        public void onUpdate(float pSecondsElapsed) {
+	            if(!taskList.isEmpty())
+	            {
+	                for(int i = 0; i < taskList.size(); i++)
+	                {
+	                    taskList.get(i).move();
+	                }
+	                taskList.clear();
+	            }
+
+	        }
+	        @Override
+	        public void reset() {
+	            // TODO Auto-generated method stub
+
+	        }
+	    });
 	}
 
 	@Override
