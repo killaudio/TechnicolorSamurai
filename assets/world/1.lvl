@@ -7,6 +7,6 @@
     <entity x="900" y="70" w="200" h="10" type="obs2"/>
     <entity x="1200" y="160" w="400" h="5" type="obs2"/>
     <entity x="1600" y="0" w="400" h="10" type="obs2"/>
-    <entity x="2280" y="0" type="floor"/>
-    <entity x="2580" y="225" type="obs1"/>
+    <entity x="2480" y="0" type="floor"/>
+    <entity x="2780" y="225" type="obs1"/>
 </level>

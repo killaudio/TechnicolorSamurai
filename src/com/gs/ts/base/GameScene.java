@@ -65,6 +65,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     private static final String TAG_ENTITY_ATTRIBUTE_W = "w";
     private static final String TAG_ENTITY_ATTRIBUTE_H = "h";
     private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
+    private static final int 	REPEATING_OBJECT_PIXEL_X = 2480;
         
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR = "floor";
     private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1 = "obs1";
@@ -268,8 +269,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
                     if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player")){
                     	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor")){
                     		player.increaseFootContacts();
-                    		if (player.getBody().getPosition().x >= 2101 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT)
-                    			taskList.add(new MoveBodyTask(player, 1 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT , 
+                    		//REPEATING_OBJECT_PIXEL_X here is the object that repeats in 0,0 in the first and last level frame. 
+                    		if (player.getBody().getPosition().x > REPEATING_OBJECT_PIXEL_X / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT)
+                    			taskList.add(new MoveBodyTask(player, player.getBody().getPosition().x - REPEATING_OBJECT_PIXEL_X / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT , 
+                    					player.getBody().getPosition().y, 0));
+                    		if (player.getBody().getPosition().x < 0 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT)
+                    			taskList.add(new MoveBodyTask(player, player.getBody().getPosition().x + REPEATING_OBJECT_PIXEL_X / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT , 
                     					player.getBody().getPosition().y, 0));
                     	}
                     }
