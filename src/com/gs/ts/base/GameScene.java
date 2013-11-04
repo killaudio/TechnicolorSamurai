@@ -3,7 +3,6 @@ package com.gs.ts.base;
 import java.util.ArrayList;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
@@ -27,9 +26,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private Player player;
 	private Text gameOverText;
-
-	private int touchNumberLeft = 0;
-	private int touchNumberRight = 0;
 	
 	private ArrayList<MoveBodyTask> taskList;
 
@@ -39,84 +35,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private void createHUD(){
 		gameHUD = new HUD();
-		//initializing score text with all the chars it'll use
+		ControlsHelper myCH = new ControlsHelper(gameHUD, player, vbom, CAMERA_WIDTH, CAMERA_HEIGHT);
+		myCH.loadControls();
 		scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
 		scoreText.setAnchorCenter(0, 0);    
 		scoreText.setText("Score: 0");
-		//Controls
-		final Rectangle left = new Rectangle(CAMERA_WIDTH/4, CAMERA_HEIGHT/2, CAMERA_WIDTH/2, CAMERA_HEIGHT, vbom)
-		{
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
-		    {
-				if (touchEvent.isActionDown()){
-					touchNumberLeft++;
-					if (touchNumberLeft + touchNumberRight == 1)
-					{
-						player.setRunningLeft();
-			        } else {
-			        	player.jump();
-			        }
-				}
-				if(touchEvent.isActionUp())
-				{
-					touchNumberLeft--;
-					if (touchNumberLeft + touchNumberRight == 0)
-						player.setRunningFalse();
-					if (touchNumberLeft == 0 && player.isRunningLeft())
-						player.setRunningRight();
-				}
-				return true;
-		    };
-		};
-		    
-		final Rectangle right = new Rectangle(CAMERA_WIDTH - CAMERA_WIDTH/4, CAMERA_HEIGHT/2, CAMERA_WIDTH/2, CAMERA_HEIGHT, vbom)
-		{
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
-		    {
-				if (touchEvent.isActionDown()){
-					touchNumberRight++;
-					if (touchNumberLeft + touchNumberRight == 1)
-					{
-						player.setRunningRight();
-			        } else {
-			        	player.jump();
-			        }
-				}
-				if(touchEvent.isActionUp())
-				{
-					touchNumberRight--;
-					if (touchNumberLeft + touchNumberRight == 0)
-						player.setRunningFalse();
-					if (touchNumberRight == 0 && player.isRunningRight())
-						player.setRunningLeft();
-				}
-				return true;
-		    };
-		};
-		
-		final Rectangle changeColor = new Rectangle(CAMERA_WIDTH/2, CAMERA_HEIGHT/6, CAMERA_WIDTH/4, CAMERA_HEIGHT/3, vbom)
-		{
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
-		    {
-				if (touchEvent.isActionDown()){
-					player.cycleColor();
-				}
-				return true;
-		    };
-		};
-		
-		left.setColor(Color.RED);
-		right.setColor(Color.CYAN);
-		changeColor.setColor(Color.PINK);
-		left.setAlpha(0.0f);
-		right.setAlpha(0.0f);
-		changeColor.setAlpha(0.0f);
-		gameHUD.registerTouchArea(changeColor);
-		gameHUD.registerTouchArea(left);
-		gameHUD.registerTouchArea(right);
-		gameHUD.attachChild(changeColor);
-		gameHUD.attachChild(left);
-		gameHUD.attachChild(right);
 		gameHUD.attachChild(scoreText);
 		camera.setHUD(gameHUD);
 	}
@@ -148,30 +71,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     	taskList = new ArrayList<MoveBodyTask>();
     	gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);
     	createBackground();
-	    createHUD();
 	    createPhysics();
-    
+	    createHUD();    
 	    setOnSceneTouchListener(this);
 	    
 	    registerUpdateHandler(new IUpdateHandler()
 	    {
-
 	        @Override
 	        public void onUpdate(float pSecondsElapsed) {
-	            if(!taskList.isEmpty())
-	            {
-	                for(int i = 0; i < taskList.size(); i++)
-	                {
+	            if(!taskList.isEmpty()){
+	                for(int i = 0; i < taskList.size(); i++){
 	                    taskList.get(i).move();
 	                }
 	                taskList.clear();
 	            }
-
 	        }
 	        @Override
-	        public void reset() {
-
-	        }
+	        public void reset() {}
 	    });
 	}
 
