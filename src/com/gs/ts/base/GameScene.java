@@ -11,18 +11,11 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gs.ts.base.SceneManager.SceneType;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener{
@@ -40,8 +33,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private ArrayList<MoveBodyTask> taskList;
 
-    private int REPEATING_OBJECT_PIXEL_X = 2480;
-	
 	private void createBackground(){
 		setBackground(new Background(Color.BLUE));
 	}
@@ -134,7 +125,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	{
 		//mod gravity vector accordingly to affect gravity(new Vector2(0, -17))
 	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -90), false);
-	    physicsWorld.setContactListener(contactListener());
+	    loadLevel(1);
+	    ContactListenerHelper myCLH = new ContactListenerHelper(player, taskList);
+	    physicsWorld.setContactListener(myCLH.getContactListener());
 	    registerUpdateHandler(physicsWorld);
 	}
 	
@@ -146,109 +139,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
         									physicsWorld, vbom, gameOverText);
         myLLH.doLoad();
         levelLoader.loadLevelFromAsset(activity.getAssets(), "world/" + levelID + ".lvl");
+        //player is parsed from .lvl file, so we need to get the instantiation
         player = myLLH.getPlayer();
-    }
-	
-    private void createGameOverText()
-    {
-        gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);
-    }
-
-    private ContactListener contactListener()
-    {
-        ContactListener contactListener = new ContactListener()
-        {
-        	boolean isSensor = false;
-        	Body bodySensor;
-            public void beginContact(Contact contact)
-            {
-                final Fixture x1 = contact.getFixtureA();
-                final Fixture x2 = contact.getFixtureB();
-                
-                if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
-                {
-                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player")){
-                    	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor")){
-                    		player.increaseFootContacts();
-                    		//REPEATING_OBJECT_PIXEL_X here is the object that repeats in 0,0 in the first and last level frame. 
-                    		if (player.getBody().getPosition().x > REPEATING_OBJECT_PIXEL_X / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT)
-                    			taskList.add(new MoveBodyTask(player, player.getBody().getPosition().x - REPEATING_OBJECT_PIXEL_X / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT , 
-                    					player.getBody().getPosition().y, 0));
-                    		if (player.getBody().getPosition().x < 0 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT)
-                    			taskList.add(new MoveBodyTask(player, player.getBody().getPosition().x + REPEATING_OBJECT_PIXEL_X / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT , 
-                    					player.getBody().getPosition().y, 0));
-                    	}
-                    }
-                }
-            }
-
-            public void endContact(Contact contact)
-            {
-                final Fixture x1 = contact.getFixtureA();
-                final Fixture x2 = contact.getFixtureB();
-
-                if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
-                {
-                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
-                    	if (x1.getBody().getUserData().equals("floor") || x2.getBody().getUserData().equals("floor"))
-                    	{
-                    		player.decreaseFootContacts();
-                    	}
-                  
-                    if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
-                    	if (x1.getBody().getUserData().equals("obstacle") || x2.getBody().getUserData().equals("obstacle"))
-                    	{
-		                    if (isSensor){
-		                		bodySensor.getFixtureList().get(0).setSensor(false);
-		                		isSensor = false;
-		                    }
-                    	}
-                }
-            }
-
-            public void preSolve(Contact contact, Manifold oldManifold)
-            {
-            	final Fixture x1 = contact.getFixtureA();
-                final Fixture x2 = contact.getFixtureB();
-
-                if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
-                {
-                	if (x1.getBody().getUserData().equals("player") || x2.getBody().getUserData().equals("player"))
-                    	if (x1.getBody().getUserData().equals("obstacle") || x2.getBody().getUserData().equals("obstacle"))
-                    	{
-                    		if (player.isColor(Player.colorsEnum.BLACK))
-                    		{
-                    			if (x1.getBody().getUserData().equals("obstacle"))
-                    			{
-                    				x1.getBody().getFixtureList().get(0).setSensor(true);
-                    				bodySensor = x1.getBody(); 
-                    			} else {
-                    				x2.getBody().getFixtureList().get(0).setSensor(true);
-                    				bodySensor = x2.getBody();
-                    			}
-                    			isSensor = true;
-                    		}
-                    	}
-                }
-            }
-
-            public void postSolve(Contact contact, ContactImpulse impulse)
-            {
-         		
-            }
-        };
-        return contactListener;
     }
 
     @Override
 	public void createScene() {
-	    createBackground();
+    	taskList = new ArrayList<MoveBodyTask>();
+    	gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);
+    	createBackground();
 	    createHUD();
 	    createPhysics();
-	    createGameOverText();
-	    loadLevel(1);	    
+    
 	    setOnSceneTouchListener(this);
-	    taskList = new ArrayList<MoveBodyTask>();
+	    
 	    registerUpdateHandler(new IUpdateHandler()
 	    {
 
@@ -266,7 +170,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	        }
 	        @Override
 	        public void reset() {
-	            // TODO Auto-generated method stub
 
 	        }
 	    });
@@ -287,7 +190,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	{
 	    camera.setHUD(null);
 	    camera.setCenter(CAMERA_WIDTH/2, CAMERA_HEIGHT/2);
-
 	    // removing all game scene objects.
 	}
 

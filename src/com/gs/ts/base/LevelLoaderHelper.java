@@ -42,14 +42,14 @@ public class LevelLoaderHelper {
 	
 	private boolean gameOverDisplayed = false;
 	
-	SimpleLevelLoader levelLoader;
-	GameScene myGS;
-	ResourcesManager myRM;
-	PhysicsWorld myPW;
-	VertexBufferObjectManager myVBOM;
-	Player myP;
-	Text myT;
-	Camera myC;
+	private SimpleLevelLoader levelLoader;
+	private GameScene myGS;
+	private ResourcesManager myRM;
+	private PhysicsWorld myPW;
+	private VertexBufferObjectManager myVBOM;
+	private Player myP;
+	private Text myT;
+	private Camera myC;
 	
 	LevelLoaderHelper (SimpleLevelLoader ll, GameScene gs, ResourcesManager rm, Camera c, 
 			PhysicsWorld pw, VertexBufferObjectManager vbm, Text t)
