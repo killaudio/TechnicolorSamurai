@@ -20,24 +20,14 @@ import com.gs.ts.base.SceneManager.SceneType;
 public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
 	private PhysicsWorld physicsWorld;
-	
-	private HUD gameHUD;
-	private Text scoreText;
-	
 	private Player player;
-	private Text gameOverText;
-	
 	private ArrayList<MoveBodyTask> taskList;
 
-	private void createBackground(){
-		setBackground(new Background(Color.BLUE));
-	}
-	
 	private void createHUD(){
-		gameHUD = new HUD();
+		HUD gameHUD = new HUD();
 		ControlsHelper myCH = new ControlsHelper(gameHUD, player, vbom, CAMERA_WIDTH, CAMERA_HEIGHT);
 		myCH.loadControls();
-		scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
+		Text scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
 		scoreText.setAnchorCenter(0, 0);    
 		scoreText.setText("Score: 0");
 		gameHUD.attachChild(scoreText);
@@ -56,7 +46,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	
     private void loadLevel(int levelID)
     {
-    	
+    	Text gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);    	
         final SimpleLevelLoader levelLoader = new SimpleLevelLoader(vbom);
         final LevelLoaderHelper myLLH = new LevelLoaderHelper(levelLoader, this, resourcesManager, camera, 
         									physicsWorld, vbom, gameOverText);
@@ -69,8 +59,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     @Override
 	public void createScene() {
     	taskList = new ArrayList<MoveBodyTask>();
-    	gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);
-    	createBackground();
+    	setBackground(new Background(Color.BLUE));
 	    createPhysics();
 	    createHUD();    
 	    setOnSceneTouchListener(this);
