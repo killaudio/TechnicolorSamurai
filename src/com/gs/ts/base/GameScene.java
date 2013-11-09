@@ -94,8 +94,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 	public void disposeScene()
 	{
 	    camera.setHUD(null);
-	    camera.setCenter(CAMERA_WIDTH/2, CAMERA_HEIGHT/2);
+	    camera.setCenter(0, 0);
 	    // removing all game scene objects.
+	    
 	}
 
 	@Override
