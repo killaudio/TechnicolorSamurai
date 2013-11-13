@@ -3,7 +3,7 @@ TechnicolorSamurai
 
 TODO
 
-   add lighting
-   integrate chi graphics and some animations
-   first sample level
+   [*] add lighting
+   [*] integrate chi graphics and some animations
+   [*] first sample level
    
