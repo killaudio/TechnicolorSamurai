@@ -1,6 +1,9 @@
 package com.gs.ts.base;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -14,8 +17,14 @@ public class ControlsHelper {
 	private float myW;
 	private float myHE;
 	
+	private Rectangle left;
+	private Rectangle right;
+	private Rectangle changeColor;
+	
 	private int touchNumberLeft = 0;
 	private int touchNumberRight = 0;
+	
+	private ArrayList<IEntity> myEntitiesList;
 	
 	ControlsHelper(HUD h, Player p, VertexBufferObjectManager v, float w, float he)
 	{
@@ -24,12 +33,14 @@ public class ControlsHelper {
 		myVBOM = v;
 		myW = w;
 		myHE = he;
+		myEntitiesList = new ArrayList<IEntity>();
 	}
 	
 	public void loadControls()
 	{
+
 		//Controls
-		final Rectangle left = new Rectangle(myW/4, myHE/2, myW/2, myHE, myVBOM)
+		left = new Rectangle(myW/4, myHE/2, myW/2, myHE, myVBOM)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -54,7 +65,7 @@ public class ControlsHelper {
 		    };
 		};
 		    
-		final Rectangle right = new Rectangle(myW - myW/4, myHE/2, myW/2, myHE, myVBOM)
+		right = new Rectangle(myW - myW/4, myHE/2, myW/2, myHE, myVBOM)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -79,7 +90,7 @@ public class ControlsHelper {
 		    };
 		};
 		
-		final Rectangle changeColor = new Rectangle(myW/2, myHE/6, myW/4, myHE/3, myVBOM)
+		changeColor = new Rectangle(myW/2, myHE/6, myW/4, myHE/3, myVBOM)
 		{
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 		    {
@@ -93,15 +104,35 @@ public class ControlsHelper {
 		left.setColor(Color.RED);
 		right.setColor(Color.CYAN);
 		changeColor.setColor(Color.PINK);
-		left.setAlpha(0.0f);
-		right.setAlpha(0.0f);
-		changeColor.setAlpha(0.0f);
+		left.setAlpha(0.5f);
+		right.setAlpha(0.5f);
+		changeColor.setAlpha(0.5f);
 		myH.registerTouchArea(changeColor);
 		myH.registerTouchArea(left);
 		myH.registerTouchArea(right);
 		myH.attachChild(changeColor);
 		myH.attachChild(left);
 		myH.attachChild(right);
+		myEntitiesList.add(left);
+		myEntitiesList.add(right);
+		myEntitiesList.add(changeColor);
 	}
 	
+	public void destroyControls()
+	{
+    	for (IEntity entity: myEntitiesList)
+    	{
+    		entity.clearEntityModifiers();
+    		entity.clearUpdateHandlers();
+    		entity.detachSelf();
+    		
+    		if (!entity.isDisposed())
+    		{
+    			entity.dispose();
+    		}
+    	}
+    	
+    	myEntitiesList.clear();
+    	myEntitiesList = null;
+	}
 }

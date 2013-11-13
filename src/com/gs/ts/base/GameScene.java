@@ -3,29 +3,28 @@ package com.gs.ts.base;
 import java.util.ArrayList;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.gs.ts.base.SceneManager.SceneType;
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener{
+public class GameScene extends BaseScene {
 	
 	private PhysicsWorld physicsWorld;
 	private Player player;
 	private ArrayList<MoveBodyTask> taskList;
-
+	private LevelLoaderHelper myLLH;
+	private ControlsHelper myCH;
+	
 	private void createHUD(){
 		HUD gameHUD = new HUD();
-		ControlsHelper myCH = new ControlsHelper(gameHUD, player, vbom, CAMERA_WIDTH, CAMERA_HEIGHT);
+		myCH = new ControlsHelper(gameHUD, player, vbom, CAMERA_WIDTH, CAMERA_HEIGHT);
 		myCH.loadControls();
 		Text scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
 		scoreText.setAnchorCenter(0, 0);    
@@ -48,7 +47,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
     {
     	Text gameOverText = new Text(0, 0, resourcesManager.font, "Game Over!", vbom);    	
         final SimpleLevelLoader levelLoader = new SimpleLevelLoader(vbom);
-        final LevelLoaderHelper myLLH = new LevelLoaderHelper(levelLoader, this, resourcesManager, camera, 
+        myLLH = new LevelLoaderHelper(levelLoader, this, resourcesManager, camera, 
         									physicsWorld, vbom, gameOverText);
         myLLH.doLoad();
         levelLoader.loadLevelFromAsset(activity.getAssets(), "world/" + levelID + ".lvl");
@@ -58,11 +57,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 
     @Override
 	public void createScene() {
+
     	taskList = new ArrayList<MoveBodyTask>();
     	setBackground(new Background(Color.BLUE));
 	    createPhysics();
 	    createHUD();    
-	    setOnSceneTouchListener(this);
 	    
 	    registerUpdateHandler(new IUpdateHandler()
 	    {
@@ -90,19 +89,32 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener{
 		return SceneType.SCENE_GAME;
 	}
 
+	public void clearScene()
+	{
+		engine.runOnUpdateThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				myLLH.clearPhysicsWorld();
+				myLLH.cleanEntities();
+				myCH.destroyControls();
+				clearTouchAreas();
+				clearUpdateHandlers();
+				myLLH = null;
+				myCH = null;
+				System.gc();
+			}
+		});
+	}
+	
 	@Override
 	public void disposeScene()
 	{
 	    camera.setHUD(null);
 	    camera.setCenter(0, 0);
 	    // removing all game scene objects.
-	    
+	    clearScene();	    
 	}
 
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-
-		return false;
-	}
-	
 }

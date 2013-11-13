@@ -36,8 +36,8 @@ public abstract class BaseScene extends Scene
         this.activity = resourcesManager.activity;
         this.vbom = resourcesManager.vbom;
         this.camera = resourcesManager.camera;
-        CAMERA_WIDTH = camera.getXMax();
-    	CAMERA_HEIGHT = camera.getYMax();
+        CAMERA_WIDTH = 960;
+    	CAMERA_HEIGHT = 540; 
         createScene();
     }
     

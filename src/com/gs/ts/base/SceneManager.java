@@ -107,7 +107,7 @@ public class SceneManager
       	setScene(loadingScene);
         disposeSplashScene();
         //ResourcesManager.getInstance().unloadMenuTextures();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
         {
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
@@ -124,7 +124,7 @@ public class SceneManager
         setScene(loadingScene);
         gameScene.disposeScene();
         ResourcesManager.getInstance().unloadGameTextures();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
         {
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {

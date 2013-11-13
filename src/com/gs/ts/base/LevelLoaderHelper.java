@@ -1,6 +1,8 @@
 package com.gs.ts.base;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -12,13 +14,16 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.debug.Debug;
 import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class LevelLoaderHelper {
@@ -50,6 +55,7 @@ public class LevelLoaderHelper {
 	private Player myP;
 	private Text myT;
 	private Camera myC;
+	private ArrayList<IEntity> myEntitiesList;
 	
 	LevelLoaderHelper (SimpleLevelLoader ll, GameScene gs, ResourcesManager rm, Camera c, 
 			PhysicsWorld pw, VertexBufferObjectManager vbm, Text t)
@@ -66,7 +72,8 @@ public class LevelLoaderHelper {
 	public int doLoad(){
 
         final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-		
+    	myEntitiesList = new ArrayList<IEntity>();
+    	
         levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(LevelConstants.TAG_LEVEL)
         {
             public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException 
@@ -128,7 +135,7 @@ public class LevelLoaderHelper {
                 }
 
                 levelObject.setCullingEnabled(true);
-
+                myEntitiesList.add(levelObject);
                 return levelObject;
             }
         });
@@ -139,4 +146,61 @@ public class LevelLoaderHelper {
 	{
 		return myP;
 	}
+	
+    public void cleanEntities()
+    {	
+    	for (IEntity entity: myEntitiesList)
+    	{
+    		entity.clearEntityModifiers();
+    		entity.clearUpdateHandlers();
+    		entity.detachSelf();
+    		
+    		if (!entity.isDisposed())
+    		{
+    			entity.dispose();
+    		}
+    	}
+    	
+    	myEntitiesList.clear();
+    	myEntitiesList = null;
+    }
+    
+    protected void clearPhysicsWorld()
+    {
+    	Iterator<Joint> allMyJoints = myPW.getJoints();
+    	while (allMyJoints.hasNext())
+    	{
+    		try
+    		{
+    			final Joint myCurrentJoint = allMyJoints.next();
+    			myPW.destroyJoint(myCurrentJoint);
+    		} 
+    		catch (Exception localException)
+    		{
+    			Debug.d("SPK - THE JOINT DOES NOT WANT TO DIE: " + localException);
+    		}
+    	}
+    	
+    	Iterator<Body> localIterator = myPW.getBodies();
+    	while (true)
+    	{
+    		if (!localIterator.hasNext())
+    		{
+    			myPW.clearForces();
+    			myPW.clearPhysicsConnectors();
+    			myPW.reset();
+    			myPW.dispose();
+    			myPW = null;
+    			return;
+    		}
+    		try
+    		{
+    			myPW.destroyBody(localIterator.next());
+    		} 
+    		catch (Exception localException)
+    		{
+    			Debug.d("SPK - THE BODY DOES NOT WANT TO DIE: " + localException);
+    		}
+    	}
+    }
 }

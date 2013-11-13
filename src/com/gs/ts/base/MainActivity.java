@@ -21,21 +21,17 @@ import android.widget.Toast;
 
 
 public class MainActivity extends BaseGameActivity {
-
+	//TO CHANGE RESOLUTION: change in BoundCamera and RatioResolutionPolicy (a couple lines below here)
+	// and in BaseScene
     private BoundCamera camera;
     private ResourcesManager resourcesManager;
         
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		int x,y;
-		DisplayMetrics metrics = new DisplayMetrics();
-	    getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	    x = metrics.widthPixels/2;
-	    y = metrics.heightPixels/2;
-		
-		camera = new BoundCamera (0, 0, x, y);
+	  		
+		camera = new BoundCamera (0, 0, 960, 540);
 		EngineOptions engineOptions = new EngineOptions(true,ScreenOrientation.LANDSCAPE_FIXED, 
-				new RatioResolutionPolicy(x, y), this.camera);
+				new RatioResolutionPolicy(960, 540), this.camera);
 		//engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);

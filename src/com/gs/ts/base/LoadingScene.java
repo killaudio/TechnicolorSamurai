@@ -8,10 +8,13 @@ import com.gs.ts.base.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene {
 
+	private Text loading = null;
+	
 	@Override
 	public void createScene() {
 		setBackground(new Background(Color.WHITE));
-		attachChild(new Text(BaseScene.CAMERA_WIDTH/2, BaseScene.CAMERA_HEIGHT/2, resourcesManager.font, "Loading...", vbom));
+		loading = new Text(0, 0, resourcesManager.font, "Loading...", vbom);
+		attachChild(loading);
 	}
 
 	@Override
