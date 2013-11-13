@@ -15,7 +15,6 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.widget.Toast;
 

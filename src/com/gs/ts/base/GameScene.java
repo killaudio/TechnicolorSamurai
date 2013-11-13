@@ -59,7 +59,7 @@ public class GameScene extends BaseScene {
 	public void createScene() {
 
     	taskList = new ArrayList<MoveBodyTask>();
-    	setBackground(new Background(Color.BLUE));
+    	setBackground(new Background(Color.BLACK));
 	    createPhysics();
 	    createHUD();    
 	    
@@ -112,7 +112,6 @@ public class GameScene extends BaseScene {
 	public void disposeScene()
 	{
 	    camera.setHUD(null);
-	    camera.setCenter(0, 0);
 	    // removing all game scene objects.
 	    clearScene();	    
 	}

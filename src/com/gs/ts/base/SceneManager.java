@@ -16,7 +16,7 @@ public class SceneManager
 	private BaseScene splashScene;
     private BaseScene menuScene;
     private BaseScene gameScene;
-    private BaseScene loadingScene;
+    private LoadingScene loadingScene;
     
     //---------------------------------------------
     // VARIABLES
@@ -106,6 +106,7 @@ public class SceneManager
     {
       	setScene(loadingScene);
         disposeSplashScene();
+        loadingScene.attachLoadingHUD();
         //ResourcesManager.getInstance().unloadMenuTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
         {
@@ -121,8 +122,9 @@ public class SceneManager
     
     public void loadMenuScene(final Engine mEngine)
     {
-        setScene(loadingScene);
+	    setScene(loadingScene);
         gameScene.disposeScene();
+        loadingScene.attachLoadingHUD();
         ResourcesManager.getInstance().unloadGameTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
         {
@@ -130,6 +132,7 @@ public class SceneManager
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuTextures();
+                loadingScene.detachLoadingHUD();
                 setScene(menuScene);
             }
         }));
@@ -153,4 +156,5 @@ public class SceneManager
     {
         return currentScene;
     }
+
 }
