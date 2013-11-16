@@ -1,4 +1,4 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +11,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.color.Color;
@@ -39,11 +41,13 @@ public class LevelLoaderHelper {
     private static final String TAG_ENTITY_ATTRIBUTE_W = "w";
     private static final String TAG_ENTITY_ATTRIBUTE_H = "h";
     private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
+    private static final String TAG_ENTITY_ATTRIBUTE_COLOR = "color";
     
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_FLOOR = "floor";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS1 = "obs1";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2 = "obs2";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ORB = "orb";
 	
 	private boolean gameOverDisplayed = false;
 	
@@ -102,6 +106,12 @@ public class LevelLoaderHelper {
                 {
                     levelObject = new Sprite(x, y, myRM.obs1_region, myVBOM);
                     PhysicsFactory.createBoxBody(myPW, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("obstacle");
+                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ORB))
+                {
+                	final int color = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_COLOR);
+                    levelObject = new Orb(x, y, myRM.orb_region, myVBOM, OrbShaderProgram.getInstance(), color);
+                    PhysicsFactory.createCircleBody(myPW, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("orb");
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2))
                 {

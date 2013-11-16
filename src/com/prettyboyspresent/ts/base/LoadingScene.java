@@ -1,11 +1,11 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.util.adt.color.Color;
 
-import com.gs.ts.base.SceneManager.SceneType;
+import com.prettyboyspresent.ts.base.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene {
 

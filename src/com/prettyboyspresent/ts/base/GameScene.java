@@ -1,18 +1,16 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import java.util.ArrayList;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.gs.ts.base.SceneManager.SceneType;
+import com.prettyboyspresent.ts.base.SceneManager.SceneType;
 
 public class GameScene extends BaseScene {
 	
@@ -26,10 +24,10 @@ public class GameScene extends BaseScene {
 		HUD gameHUD = new HUD();
 		myCH = new ControlsHelper(gameHUD, player, vbom, CAMERA_WIDTH, CAMERA_HEIGHT);
 		myCH.loadControls();
-		Text scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
-		scoreText.setAnchorCenter(0, 0);    
-		scoreText.setText("Score: 0");
-		gameHUD.attachChild(scoreText);
+//		Text scoreText = new Text(0, 0, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT) ,vbom);
+//		scoreText.setAnchorCenter(0, 0);    
+//		scoreText.setText("Score: 0");
+//		gameHUD.attachChild(scoreText);
 		camera.setHUD(gameHUD);
 	}
 	

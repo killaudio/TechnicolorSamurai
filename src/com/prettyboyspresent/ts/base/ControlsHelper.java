@@ -1,4 +1,4 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import java.util.ArrayList;
 
@@ -104,9 +104,9 @@ public class ControlsHelper {
 		left.setColor(Color.RED);
 		right.setColor(Color.CYAN);
 		changeColor.setColor(Color.PINK);
-		left.setAlpha(0.5f);
-		right.setAlpha(0.5f);
-		changeColor.setAlpha(0.5f);
+		left.setAlpha(0.0f);
+		right.setAlpha(0.0f);
+		changeColor.setAlpha(0.0f);
 		myH.registerTouchArea(changeColor);
 		myH.registerTouchArea(left);
 		myH.registerTouchArea(right);

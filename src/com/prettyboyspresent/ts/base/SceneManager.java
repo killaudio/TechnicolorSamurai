@@ -1,11 +1,11 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
-import com.gs.ts.base.BaseScene;
+import com.prettyboyspresent.ts.base.BaseScene;
 
 public class SceneManager
 {

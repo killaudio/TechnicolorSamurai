@@ -1,4 +1,4 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -7,8 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.app.Activity;
 
-import com.gs.ts.base.ResourcesManager;
-import com.gs.ts.base.SceneManager.SceneType;
+import com.prettyboyspresent.ts.base.ResourcesManager;
+import com.prettyboyspresent.ts.base.SceneManager.SceneType;
 
 public abstract class BaseScene extends Scene
 {

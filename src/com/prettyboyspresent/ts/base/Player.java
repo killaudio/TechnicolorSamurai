@@ -1,4 +1,4 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.AnimatedSprite;

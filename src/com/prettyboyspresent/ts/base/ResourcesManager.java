@@ -1,4 +1,4 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -17,7 +17,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 import android.graphics.Color;
 
-import com.gs.ts.base.MainActivity;
+import com.prettyboyspresent.ts.base.MainActivity;
 
 public class ResourcesManager
 {
@@ -44,6 +44,7 @@ public class ResourcesManager
     public ITextureRegion floor_region;
     public ITextureRegion obs1_region;
     public ITextureRegion player_region;
+    public ITextureRegion orb_region;
     
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     
@@ -84,6 +85,7 @@ public class ResourcesManager
     	floor_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "floor.png");
     	obs1_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "obstacle1.png");
     	player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "player.png", 3, 1);
+    	orb_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "orb.png");
     	
     	try 
     	{

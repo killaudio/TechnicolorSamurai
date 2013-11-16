@@ -1,11 +1,11 @@
-package com.gs.ts.base;
+package com.prettyboyspresent.ts.base;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 
-import com.gs.ts.base.BaseScene;
-import com.gs.ts.base.SceneManager.SceneType;
+import com.prettyboyspresent.ts.base.BaseScene;
+import com.prettyboyspresent.ts.base.SceneManager.SceneType;
 
 public class SplashScene extends BaseScene{
 
