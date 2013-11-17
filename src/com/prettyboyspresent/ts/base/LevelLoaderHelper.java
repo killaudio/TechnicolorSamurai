@@ -110,7 +110,7 @@ public class LevelLoaderHelper {
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ORB))
                 {
                 	final int color = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_COLOR);
-                    levelObject = new Orb(x, y, myRM.orb_region, myVBOM, OrbShaderProgram.getInstance(), color);
+                    levelObject = new Orb(x, y, myRM.orb_region, myVBOM, color);
                     PhysicsFactory.createCircleBody(myPW, levelObject, BodyType.StaticBody, FIXTURE_DEF).setUserData("orb");
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_OBS2))
